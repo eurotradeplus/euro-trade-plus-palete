@@ -12,7 +12,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export default function LoginPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState('admin@eurotradeplus.rs');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -63,6 +63,7 @@ export default function LoginPage() {
       <form
         onSubmit={handleLogin}
         className="bg-white p-8 rounded-2xl shadow max-w-md w-full"
+        autoComplete="off"
       >
         <h1 className="text-3xl font-bold text-green-800 text-center">
           Euro Trade Plus
@@ -82,9 +83,11 @@ export default function LoginPage() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             type="email"
-            autoComplete="email"
+            placeholder="Unesite email"
+            autoComplete="off"
             autoCapitalize="none"
             autoCorrect="off"
+            spellCheck={false}
             required
           />
         </div>
@@ -99,7 +102,8 @@ export default function LoginPage() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             type="password"
-            autoComplete="current-password"
+            placeholder="Unesite lozinku"
+            autoComplete="new-password"
             required
           />
         </div>
