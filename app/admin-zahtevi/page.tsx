@@ -42,6 +42,86 @@ export default function AdminZahteviPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
 
+  function buildPurchaseUpdateData(newData: any) {
+    const updateData: any = {};
+
+    if (newData.purchase_date !== undefined) {
+      updateData.purchase_date = newData.purchase_date;
+    }
+
+    if (newData.supplier_id !== undefined) {
+      updateData.supplier_id = newData.supplier_id;
+    }
+
+    if (newData.pallet_type_id !== undefined) {
+      updateData.pallet_type_id = newData.pallet_type_id;
+    }
+
+    if (newData.quantity !== undefined) {
+      updateData.quantity = Number(newData.quantity);
+    }
+
+    if (newData.purchase_price !== undefined) {
+      updateData.purchase_price = Number(newData.purchase_price);
+    }
+
+    if (newData.payment_status !== undefined) {
+      updateData.payment_status = newData.payment_status;
+    }
+
+    if (newData.payment_method !== undefined) {
+      updateData.payment_method = newData.payment_method;
+    }
+
+    if (newData.note !== undefined) {
+      updateData.note = newData.note;
+    }
+
+    return updateData;
+  }
+
+  function buildSaleUpdateData(newData: any) {
+    const updateData: any = {};
+
+    if (newData.sale_date !== undefined) {
+      updateData.sale_date = newData.sale_date;
+    }
+
+    if (newData.delivery_date !== undefined) {
+      updateData.delivery_date = newData.delivery_date;
+    }
+
+    if (newData.customer_id !== undefined) {
+      updateData.customer_id = newData.customer_id;
+    }
+
+    if (newData.pallet_type_id !== undefined) {
+      updateData.pallet_type_id = newData.pallet_type_id;
+    }
+
+    if (newData.quantity !== undefined) {
+      updateData.quantity = Number(newData.quantity);
+    }
+
+    if (newData.sale_price !== undefined) {
+      updateData.sale_price = Number(newData.sale_price);
+    }
+
+    if (newData.payment_status !== undefined) {
+      updateData.payment_status = newData.payment_status;
+    }
+
+    if (newData.payment_method !== undefined) {
+      updateData.payment_method = newData.payment_method;
+    }
+
+    if (newData.note !== undefined) {
+      updateData.note = newData.note;
+    }
+
+    return updateData;
+  }
+
   async function loadData() {
     setLoading(true);
     setErrorMessage('');
@@ -142,9 +222,11 @@ export default function AdminZahteviPage() {
         return;
       }
 
+      const updateData = buildPurchaseUpdateData(request.new_data);
+
       const { error: updateError } = await supabase
         .from('purchases')
-        .update(request.new_data)
+        .update(updateData)
         .eq('id', request.record_id);
 
       if (updateError) {
@@ -179,9 +261,11 @@ export default function AdminZahteviPage() {
         return;
       }
 
+      const updateData = buildSaleUpdateData(request.new_data);
+
       const { error: updateError } = await supabase
         .from('sales')
-        .update(request.new_data)
+        .update(updateData)
         .eq('id', request.record_id);
 
       if (updateError) {
