@@ -42,6 +42,10 @@ export default function DobavljaciPage() {
   const [note, setNote] = useState('');
   const [message, setMessage] = useState('');
 
+  function cleanPhoneForCall(value: string) {
+    return value.replace(/[^\d+]/g, '');
+  }
+
   async function checkUserAndLoad() {
     const {
       data: { user },
@@ -209,6 +213,8 @@ export default function DobavljaciPage() {
               className="mt-1 w-full border rounded-xl px-4 py-3"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              placeholder="Primer: 062/9711-091"
+              inputMode="tel"
             />
           </div>
 
@@ -327,7 +333,18 @@ export default function DobavljaciPage() {
                     <td className="p-3">
                       {supplier.type === 'firma' ? 'Firma' : 'Fizičko lice'}
                     </td>
-                    <td className="p-3">{supplier.phone || '-'}</td>
+                    <td className="p-3">
+                      {supplier.phone ? (
+                        <a
+                          href={`tel:${cleanPhoneForCall(supplier.phone)}`}
+                          className="text-green-800 font-semibold underline"
+                        >
+                          {supplier.phone}
+                        </a>
+                      ) : (
+                        '-'
+                      )}
+                    </td>
                     <td className="p-3">{supplier.address || '-'}</td>
                     <td className="p-3">{supplier.pib || '-'}</td>
                     <td className="p-3">{supplier.mb || '-'}</td>
