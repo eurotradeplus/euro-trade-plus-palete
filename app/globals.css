@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3f4f6;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--background);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+table {
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  main {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  header {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  nav {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  nav a {
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  section {
+    padding: 16px !important;
+  }
+
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 850px;
+  }
+
+  th,
+  td {
+    white-space: nowrap;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 22px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
+  }
+
+  .text-3xl {
+    font-size: 24px !important;
+    line-height: 32px !important;
+  }
+
+  .rounded-2xl {
+    border-radius: 14px !important;
+  }
+
+  .p-6 {
+    padding: 16px !important;
+  }
+
+  .p-5 {
+    padding: 16px !important;
+  }
+
+  .px-6 {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .py-4 {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+}
