@@ -47,6 +47,8 @@ export default function ProdajaPage() {
   const [message, setMessage] = useState('');
 
   async function loadData() {
+    setLoading(true);
+
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -68,37 +70,47 @@ export default function ProdajaPage() {
       .order('name', { ascending: true });
 
     const stockResult = await supabase
-      .from('current_stock')
-      .select('*');
+      .from('final_stock')
+      .select('pallet_type_id, pallet_type_name, current_quantity');
 
     if (customersResult.data) {
       setCustomers(customersResult.data as Customer[]);
-      if (customersResult.data.length > 0) {
+
+      if (!customerId && customersResult.data.length > 0) {
         setCustomerId(customersResult.data[0].id);
       }
     }
 
     if (palletTypesResult.data) {
       setPalletTypes(palletTypesResult.data as PalletType[]);
-      if (palletTypesResult.data.length > 0) {
+
+      if (!palletTypeId && palletTypesResult.data.length > 0) {
         setPalletTypeId(palletTypesResult.data[0].id);
       }
     }
 
     if (stockResult.data) {
       setStock(stockResult.data as StockItem[]);
+    } else {
+      setStock([]);
     }
 
     const today = new Date().toISOString().slice(0, 10);
-    setSaleDate(today);
-    setDeliveryDate(today);
+
+    if (!saleDate) {
+      setSaleDate(today);
+    }
+
+    if (!deliveryDate) {
+      setDeliveryDate(today);
+    }
 
     setLoading(false);
   }
 
   function getCurrentStock() {
     const found = stock.find((item) => item.pallet_type_id === palletTypeId);
-    return found ? found.current_quantity : 0;
+    return found ? Number(found.current_quantity || 0) : 0;
   }
 
   async function saveSale(e: any) {
@@ -119,9 +131,29 @@ export default function ProdajaPage() {
     const currentStock = getCurrentStock();
     const saleQuantity = Number(quantity);
 
+    if (!customerId) {
+      setSaving(false);
+      setMessage('Greška: izaberi kupca.');
+      return;
+    }
+
+    if (!palletTypeId) {
+      setSaving(false);
+      setMessage('Greška: izaberi vrstu palete.');
+      return;
+    }
+
+    if (!saleQuantity || saleQuantity <= 0) {
+      setSaving(false);
+      setMessage('Greška: unesi ispravnu količinu.');
+      return;
+    }
+
     if (saleQuantity > currentStock) {
       setSaving(false);
-      setMessage('Greška: nema dovoljno paleta na stanju.');
+      setMessage(
+        `Greška: nema dovoljno paleta na stanju. Trenutno stanje je ${currentStock} kom.`
+      );
       return;
     }
 
@@ -131,7 +163,7 @@ export default function ProdajaPage() {
       quantity: saleQuantity,
       sale_price: Number(salePrice),
       sale_date: saleDate,
-      delivery_date: deliveryDate,
+      delivery_date: deliveryDate || null,
       payment_status: paymentStatus,
       payment_method: paymentMethod,
       note: note,
@@ -141,7 +173,7 @@ export default function ProdajaPage() {
     setSaving(false);
 
     if (error) {
-      setMessage('Greška: prodaja nije sačuvana.');
+      setMessage('Greška: prodaja nije sačuvana. ' + error.message);
       return;
     }
 
@@ -226,6 +258,12 @@ export default function ProdajaPage() {
             Unos prodaje paleta
           </h2>
 
+          {customers.length === 0 ? (
+            <div className="mt-5 bg-yellow-50 text-yellow-800 px-4 py-3 rounded-xl text-sm">
+              Nema unetih kupaca. Prvo dodaj kupca na stranici Kupci.
+            </div>
+          ) : null}
+
           <div className="mt-5">
             <label className="block text-sm font-medium text-gray-700">
               Kupac
@@ -303,7 +341,10 @@ export default function ProdajaPage() {
           <div className="mt-4 bg-gray-50 rounded-xl p-4">
             <p className="text-sm text-gray-600">Ukupna vrednost prodaje:</p>
             <p className="text-2xl font-bold text-green-800">
-              {Number(quantity || 0) * Number(salePrice || 0)} RSD
+              {new Intl.NumberFormat('sr-RS').format(
+                Number(quantity || 0) * Number(salePrice || 0)
+              )}{' '}
+              RSD
             </p>
           </div>
 
@@ -383,7 +424,7 @@ export default function ProdajaPage() {
 
           <button
             type="submit"
-            disabled={saving}
+            disabled={saving || customers.length === 0}
             className="mt-6 w-full bg-green-800 text-white rounded-xl py-3 font-semibold hover:bg-green-900 disabled:opacity-60"
           >
             {saving ? 'Čuvanje...' : 'Sačuvaj prodaju'}
