@@ -68,10 +68,7 @@ export default function PopravkaPaletaPage() {
 
     return (
       n.includes('ostec') &&
-      (
-        n.includes('euro') ||
-        n.includes('jednokrat')
-      )
+      (n.includes('euro') || n.includes('jednokrat'))
     );
   }
 
@@ -127,10 +124,7 @@ export default function PopravkaPaletaPage() {
         return (
           !n.includes('ostec') &&
           n.includes('euro') &&
-          (
-            n.includes('klasa 1') ||
-            n.includes('klasa 2')
-          )
+          (n.includes('klasa 1') || n.includes('klasa 2'))
         );
       });
     }
@@ -192,18 +186,6 @@ export default function PopravkaPaletaPage() {
 
     if (profileError || !profileData?.active) {
       alert('Korisnik nije aktivan.');
-      router.push('/dashboard');
-      return;
-    }
-
-    const { data: permissionData, error: permissionError } = await supabase
-      .from('user_permissions')
-      .select('can_adjust_stock')
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    if (permissionError || !permissionData?.can_adjust_stock) {
-      alert('Nemate dozvolu za popravku paleta.');
       router.push('/dashboard');
       return;
     }
