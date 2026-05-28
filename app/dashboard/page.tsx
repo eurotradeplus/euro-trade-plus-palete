@@ -332,6 +332,10 @@ export default function DashboardPage() {
           Nova prodaja
         </Link>
 
+        <Link className="bg-orange-100 text-orange-900 px-4 py-2 rounded-xl font-semibold" href="/popravka-paleta">
+          Popravka paleta
+        </Link>
+
         <Link className="bg-gray-100 px-4 py-2 rounded-xl" href="/dobavljaci">
           Dobavljači
         </Link>
@@ -505,6 +509,16 @@ export default function DashboardPage() {
           </Link>
 
           <Link
+            href="/popravka-paleta"
+            className="bg-orange-100 text-orange-900 rounded-2xl shadow p-5 font-semibold"
+          >
+            Popravka paleta
+            <p className="text-orange-800 text-sm mt-1">
+              Prebaci oštećene palete u ispravne
+            </p>
+          </Link>
+
+          <Link
             href="/lista-otkupa"
             className="bg-white rounded-2xl shadow p-5 font-semibold text-green-900"
           >
@@ -523,6 +537,18 @@ export default function DashboardPage() {
               Pregled i zahtevi za izmene
             </p>
           </Link>
+
+          {canAdjustStock ? (
+            <Link
+              href="/korekcija-lagera"
+              className="bg-yellow-100 text-yellow-900 rounded-2xl shadow p-5 font-semibold"
+            >
+              Korekcija lagera
+              <p className="text-yellow-800 text-sm mt-1">
+                Ručno povećanje ili smanjenje stanja
+              </p>
+            </Link>
+          ) : null}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
